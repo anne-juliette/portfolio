@@ -1,0 +1,773 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projets – Anne-Juliette</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #2e8b57;
+      color: #3c2f2f;
+      min-height: 100vh;
+      position: relative;
+    }
+    .leaf {
+      position: fixed;
+      width: 100px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .leaf-tl { top: 0; left: 0; transform: rotate(0deg); }
+    .leaf-tr { top: 0; right: 0; transform: scaleX(-1); }
+    .leaf-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+    .leaf-br { bottom: 0; right: 0; transform: scale(-1); }
+    nav.topnav {
+      position: sticky;
+      top: 0;
+      background: rgba(60, 47, 47, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 10;
+    }
+    nav.topnav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+    nav.topnav a {
+      text-decoration: none;
+      color: #f0f0f0;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav.topnav a:hover { color: #98ff98; }
+    .welcome {
+      max-width: 800px;
+      margin: 3rem auto 2rem;
+      text-align: center;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #f0f0f0;
+      padding: 1rem;
+    }
+    .welcome h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 2.5rem;
+      color: #f3e5ab;
+      margin-bottom: 1rem;
+    }
+    .filters {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+    .filter-group label {
+      color: #f3e5ab;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .filter-group select {
+      padding: 0.55rem 1.1rem;
+      font-size: 1rem;
+      background: #f3e5ab;
+      color: #3c2f2f;
+      border: 2px solid #3c2f2f;
+      border-radius: 6px;
+      cursor: pointer;
+      min-width: 180px;
+      transition: all 0.25s;
+    }
+    .filter-group select:hover,
+    .filter-group select:focus {
+      background: #98ff98;
+      border-color: #98ff98;
+      outline: none;
+    }
+    .projects-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      z-index: 2;
+    }
+    .project-card {
+      background: #f3e5ab;
+      border: 3px solid #e0d8d8;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .project-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      border-color: #98ff98;
+    }
+    .project-card img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      display: block;
+    }
+    .project-card h2 {
+      font-family: 'Courier New', monospace;
+      font-size: 1.4rem;
+      padding: 1rem;
+      color: #3c2f2f;
+      text-align: center;
+    }
+    .project-card p {
+      padding: 0 1rem 1rem;
+      font-size: 0.9rem;
+      color: #3c2f2f;
+      line-height: 1.4;
+      text-align: justify;
+    }
+    .project-card.expanded {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.1);
+      width: 90%;
+      max-width: 800px;
+      max-height: 70vh;
+      overflow-y: auto;
+      z-index: 100;
+      background: #f3e5ab;
+      border: 4px solid #98ff98;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+    .project-card.expanded .project-details { display: block; padding: 1rem; }
+    .project-card .project-details { display: none; }
+    .project-card.expanded .close-btn {
+      display: block;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #3c2f2f;
+      color: #f3e5ab;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 5px;
+    }
+    .project-details img {
+      max-width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+      display: block;
+      margin: 1rem auto;
+      border: 2px solid #3c2f2f;
+      border-radius: 5px;
+    }
+    .project-details img.project-main-img {
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: contain;
+      margin: 1.5rem auto 1rem auto;
+      background: #f3e5ab;
+      border: 2px solid #3c2f2f;
+      border-radius: 5px;
+    }
+    .project-details object {
+      width: 100%;
+      height: 350px;
+      border: none;
+      margin-top: 1rem;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 99;
+    }
+    .overlay.active { display: block; }
+    footer {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.8rem;
+      color: #f3e5ab;
+      z-index: 2;
+    }
+    @media (max-width: 680px) {
+      .filters { flex-direction: column; gap: 1.6rem; }
+      .filter-group { width: 100%; justify-content: center; }
+      .filter-group select { min-width: 220px; }
+    }
+    @media (max-width: 600px) {
+      .projects-container { grid-template-columns: 1fr; }
+      .project-card.expanded {
+        width: 90%;
+        max-width: 90%;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      nav.topnav ul { flex-wrap: wrap; gap: 1rem; }
+      .project-details img { max-height: 250px; }
+      .project-details img.project-main-img { max-height: 200px; }
+      .project-details object { height: 250px; }
+    }
+  </style>
+</head>
+<body>
+  <img src="assets/img/Fleur d'hibiscus.png" class="leaf leaf-tl" alt="">
+  <img src="assets/img/Fleur d'hibiscus.png" class="leaf leaf-tr" alt="">
+  <img src="assets/img/Fleur d'hibiscus.png" class="leaf leaf-bl" alt="">
+  <img src="assets/img/Fleur d'hibiscus.png" class="leaf leaf-br" alt="">
+  <nav class="topnav">
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="competences.html">Compétences</a></li>
+      <li><a href="experiences.html">Expériences professionnelles</a></li>
+      <li><a href="apropos.html">À propos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="welcome">
+    <h1>Mes Projets</h1>
+    <p>Découvrez une sélection de projets réalisés dans le cadre de ma formation en Réseaux et Télécommunications, ainsi que des projets personnels.</p>
+  </div>
+  <div class="filters">
+    <div class="filter-group">
+      <label for="cat-select">Catégorie :</label>
+      <select id="cat-select">
+        <option value="all" selected>Tous</option>
+        <option value="reseau">Réseau</option>
+        <option value="informatique">Informatique</option>
+        <option value="telecommunication">Télécommunication</option>
+        <option value="personnelle">Personnelle</option> <!-- Nouvel onglet ajouté -->
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="year-select">Année :</label>
+      <select id="year-select">
+        <option value="all" selected>Tous</option>
+        <option value="1">1ère Année</option>
+        <option value="2">2ème Année</option>
+      </select>
+    </div>
+  </div>
+  <div class="projects-container">
+    <!-- Projet 1 -->
+    <div class="project-card" data-category="reseau" data-year="1">
+      <img src="assets/img/network.jpg" alt="Réseaux">
+      <h2>1. Analyse d’un réseau informatique</h2>
+      <p>Exploration et analyse d’un réseau domestique : équipements, IP, topologie, trafic, et énergie.</p>
+      <div class="project-details">
+        <h2>SAÉ 12 – Découverte et analyse d’un réseau informatique personnel</h2>
+        <p><em>Objectif : Comprendre le fonctionnement d’un réseau domestique.</em><br>
+           J’ai exploré mon réseau domestique en identifiant les équipements (box, ordinateur, serveurs), analysé les adresses IP (publique/privée), créé un schéma de topologie avec diagrams.net, observé le trafic réseau avec Wireshark, effectué des traceroutes, et calculé la consommation énergétique (frigo et PC portable) avec conversion en émissions de CO2.<br>
+           <strong>Ce que j’ai fait :</strong><br>
+           - Identification des équipements du réseau.<br>
+           - Analyse des adresses IP vues depuis Internet et localement.<br>
+           - Création d’un schéma réseau détaillé.<br>
+           - Observation des échanges réseau (Wireshark, adresses MAC/IP).<br>
+           - Traceroutes vers divers sites pour analyser les routes.<br>
+           - Mesures de consommation électrique et calculs de CO2.<br>
+           <strong>Compétences acquises :</strong> Compréhension des réseaux (IP, MAC), utilisation de Wireshark et traceroute, analyse de topologie, notions d’impact environnemental.<br>
+           <strong>Rendus :</strong><br>
+           - Schéma réseau annoté (image).<br>
+           - Captures Wireshark expliquées.<br>
+           - Tableau de traceroute avec analyse AS.<br>
+           - Extrait du rapport (PDF).</p>
+        <img src="assets/img/network-schema.jpg" alt="Schéma du réseau domestique créé avec diagrams.net">
+        <p><em>Schéma réseau annoté montrant la topologie de mon réseau domestique.</em></p>
+        <img src="assets/img/wireshark-capture.jpg" alt="Capture Wireshark">
+        <p><em>Capture Wireshark montrant les échanges réseau avec adresses MAC/IP.</em></p>
+        <object data="assets/docs/Compt_rendu_partie2_SAE12.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/Compt_rendu_partie2_SAE12.pdf" target="_blank">Télécharger le rapport</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 2 -->
+    <div class="project-card" data-category="informatique" data-year="1">
+      <img src="assets/img/Capture d’écran 2025-05-31 à 13.12.45.jpeg" class="project-main-img" alt="Application photo">
+      <h2>2. PHOTO_ATB – Gestion de photos sécurisée</h2>
+      <p>Application web pour gérer des photos avec sécurité et traçabilité multi-profils.</p>
+      <div class="project-details">
+        <h2>PHOTO_ATB – Développement d’une application de gestion de photos sécurisée</h2>
+        <p><em>Objectif : Créer une application web sécurisée pour la gestion de photos.</em><br>
+           J’ai développé une application web avec Flask, intégrant une gestion multi-profils (Super Administrateur, Administrateur, Opérateur), une authentification sécurisée, et la traçabilité des actions. J’ai conçu une base de données MySQL pour gérer utilisateurs, logs, et paramètres.<br>
+           <strong>Ce que j’ai fait :</strong><br>
+           - Conception du schéma relationnel (utilisateurs, rôles, logs).<br>
+           - Création des tables et requêtes SQL (logs).<br>
+           - Mise en place de l’authentification (hashage, blocage après 3 échecs).<br>
+           - Gestion des rôles et traçabilité des actions (logs info/warning/alarme).<br>
+           - Interface d’administration pour gérer utilisateurs et sécurité.<br>
+           <strong>Compétences acquises :</strong> Développement web sécurisé, gestion de bases de données, droits utilisateurs, bonnes pratiques de sécurité.<br>
+           <strong>Rendus :</strong><br>
+           - Base de données.<br>
+           - Captures de l’interface web.<br>
+           - Exemple de log d’action.<br>
+           - Documentation fonctionnelle (PDF).</p>
+        <img src="assets/img/basededonne.jpeg" alt="Schéma de la base de données">
+        <p><em>Schéma relationnel de la base de données pour PHOTO_ATB.</em></p>
+        <img src="assets/img/site.jpeg" alt="Interface de l’application">
+        <p><em>Capture de l’interface web de gestion des utilisateurs.</em></p>
+        <object data="assets/docs/Rapport_Thales.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/Rapport_Thales.pdf" target="_blank">Télécharger la documentation</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 3 -->
+    <div class="project-card" data-category="reseau" data-year="1">
+      <img src="assets/img/cisco.jpg" alt="Réseau Cisco">
+      <h2>3. Réseau d’entreprise Cisco</h2>
+      <p>Simulation d’un réseau d’entreprise avec VLAN, DHCP, DNS, et sécurité ASA.</p>
+      <div class="project-details">
+        <h2>SAÉ 21 – Mise en place d’un réseau d’entreprise sous Cisco Packet Tracer</h2>
+        <p><em>Objectif : Simuler un réseau d’entreprise complet.</em><br>
+           J’ai configuré un réseau d’entreprise dans Cisco Packet Tracer, incluant un plan d’adressage IP, des VLAN, un routage inter-VLAN, des serveurs DHCP et DNS, et une sécurité via ASA. J’ai effectué des tests de connectivité pour valider le fonctionnement.<br>
+           <strong>Ce que j’ai fait :</strong><br>
+           - Plan d’adressage IP et configuration des VLAN.<br>
+           - Mise en place de serveurs DHCP et DNS.<br>
+           - Configuration de la sécurité avec ASA.<br>
+           - Tests de connectivité (ping).<br>
+           <strong>Compétences acquises :</strong> Configuration réseau avancée, sécurité Cisco, segmentation réseau.<br>
+           <strong>Rendus :</strong><br>
+           - Captures de configuration CLI Cisco.<br>
+           - Schéma réseau Packet Tracer.<br>
+           - Résultats de tests de connectivité.</p>
+        <img src="assets/img/cisco-schema.jpg" alt="Schéma réseau Cisco">
+        <p><em>Schéma du réseau d’entreprise configuré dans Cisco Packet Tracer.</em></p>
+        <img src="assets/img/cisco-cli.jpg" alt="Configuration CLI Cisco">
+        <p><em>Capture de la configuration CLI dans Cisco Packet Tracer.</em></p>
+        <object data="assets/docs/sae21-report.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher the PDF. <a href="assets/docs/sae21-report.pdf" target="_blank">Télécharger le rapport</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 4 -->
+    <div class="project-card" data-category="informatique" data-year="1">
+      <img src="assets/img/webdev.jpg" alt="Site web">
+      <h2>4. Site web dynamique</h2>
+      <p>Site web avec authentification, gestion de sessions, et base MySQL.</p>
+      <div class="project-details">
+        <h2>R209 – Site web dynamique (HTML, PHP, Python, MySQL)</h2>
+        <p><em>Objectif : Développer un site web dynamique full stack.</em><br>
+           J’ai créé un site web dynamique permettant l’authentification des utilisateurs, la gestion des sessions, et la gestion des données via une base MySQL. Le projet combine un front-end en HTML/CSS/JavaScript avec un back-end en PHP et Python pour une application interactive et sécurisée.<br>
+           <strong>Ce que j’ai fait :</strong><br>
+           - Développement front-end avec HTML, CSS, JavaScript (interface ergonomique).<br>
+           - Back-end en PHP (authentification, sessions, interaction MySQL).<br>
+           - Python pour automatisation des tâches en base de données (exports, analyses).<br>
+           - Conception et gestion de la base MySQL (tables, requêtes SQL, droits).<br>
+           - Sécurité : validation des entrées, gestion des mots de passe, protection des accès.<br>
+           <strong>Compétences acquises :</strong> Développement full stack, sécurisation web, gestion de bases de données, automatisation Python.<br>
+           <strong>Rendus :</strong><br>
+           - Captures d’écran (accueil, connexion, gestion, erreur).<br>
+           - Extraits de code PHP et Python (commentés).<br>
+           - Schéma de la base de données.<br>
+           - Exemple de session utilisateur (logs).</p>
+        <img src="assets/img/r209-home.jpg" alt="Page d’accueil du site">
+        <p><em>Capture de la page d’accueil du site web dynamique.</em></p>
+        <img src="assets/img/r209-schema.jpg" alt="Schéma de la base de données">
+        <p><em>Schéma des tables MySQL pour la gestion des utilisateurs.</em></p>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 5 -->
+    <div class="project-card" data-category="telecommunication" data-year="1">
+      <img src="assets/img/coaxial.jpg" alt="Câble coaxial">
+      <h2>5. Analyse du câble coaxial</h2>
+      <p>Étude théorique et expérimentale des caractéristiques du câble coaxial.</p>
+      <div class="project-details">
+        <h2>SAÉ 13 – Découvrir un dispositif de transmission : Le câble coaxial</h2>
+        <p><em>Introduction : Ce projet explore le câble coaxial, un support clé en télécommunications. Il m’a permis d’approfondir mes connaissances sur les supports de transmission, d’utiliser des outils de simulation, et de rédiger un rapport structuré.</em><br>
+           <em>Objectif : Analyser les caractéristiques et performances du câble coaxial.</em><br>
+           J’ai étudié le câble coaxial, ses principes physiques, ses usages, et son atténuation à l’aide de simulations et de recherches. Le projet incluait une analyse quantitative via OCTAVE/MATLAB et un compte-rendu scientifique.<br>
+           <strong>Ce que j’ai fait :</strong><br>
+           - Recherche sur l’historique, le fonctionnement (cage de Faraday), et les usages (télécoms, TV, réseaux).<br>
+           - Analyse des paramètres : impédance, atténuation, retard de propagation.<br>
+           - Simulations avec OCTAVE/MATLAB : courbes d’atténuation selon fréquence et longueur.<br>
+           - Rédaction d’un rapport scientifique avec résultats et conclusions.<br>
+           - (Optionnel) Mesures pratiques : atténuation, impédance, retard.<br>
+           <strong>Compétences acquises :</strong> Compréhension des supports de transmission, simulation scientifique (OCTAVE/MATLAB), rédaction technique, analyse de données.<br>
+           <strong>Rendus :</strong><br>
+           - Extraits du rapport (PDF).<br>
+           - Courbes OCTAVE/MATLAB (images).<br>
+           - Extrait de code de simulation (commenté).<br>
+           - Tableau des données constructeurs.<br>
+           - Schéma du câble coaxial.<br>
+           - Photo de montage TP (si réalisé).</p>
+        <img src="assets/img/coaxial-schema.jpg" alt="Schéma du câble coaxial">
+        <p><em>Schéma illustrant la structure du câble coaxial.</em></p>
+        <img src="assets/img/coaxial-curves.jpg" alt="Courbes d’atténuation">
+        <p><em>Courbes d’atténuation générées avec OCTAVE/MATLAB.</em></p>
+        <object data="assets/docs/Anty_AA-J_Anne-Juliette-SAE13-Rapport.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/Anty_AA-J_Anne-Juliette-SAE13-Rapport.pdf" target="_blank">Télécharger le rapport</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 6 -->
+    <div class="project-card" data-category="informatique" data-year="1">
+      <img src="assets/img/bdd-presentation.jpg" alt="Présentation base de données">
+      <h2>6. Base de données relationnelles</h2>
+      <p>Conception, création et interrogation d’une base de données</p>
+      <div class="project-details">
+        <h2>R207 – Base de données relationnelles</h2>
+        <p><em>Objectif : Comprendre la modélisation, la création et l’exploitation d’une base de données relationnelle.</em><br>
+           Cet exercice m’a permis de travailler sur la conception du schéma relationnel, la création des tables en SQL, l’insertion de données et la réalisation de requêtes pour interroger la base.<br>
+           <strong>Ce que j’ai fait :</strong><br>
+           - Conception du schéma Entités/Associations (E/A) : modéliser les entités, les relations et les attributs principaux.<br>
+           - Traduction en schéma relationnel (tables, clés primaires et étrangères).<br>
+           - Normalisation et vérification de la cohérence du modèle.<br>
+           - Implémentation des tables avec <code>CREATE TABLE</code> en SQL.<br>
+           - Ajout de données avec <code>INSERT INTO</code>.<br>
+           - Réalisation de requêtes SQL (<code>SELECT</code>, <code>JOIN</code>, <code>WHERE</code>, <code>ORDER BY</code>).<br>
+           <strong>Compétences acquises :</strong> Modélisation de données, normalisation, écriture de requêtes SQL, manipulation de bases de données avec un SGBD.<br>
+           <strong>Rendus :</strong><br>
+           - Schéma Entités/Associations (image).<br>
+           - Création des tables SQL (image).<br>
+           - Requêtes SQL (image).<br>
+           - Rapport d’exercice (PDF).</p>
+        <img src="assets/img/schema-bdd-exemple.png" class="project-main-img" alt="Schéma entités/associations">
+        <p><em>Schéma Entités/Associations modélisé pour la base de données.</em></p>
+        <img src="assets/img/tables-exemple.png" alt="Création des tables SQL">
+        <p><em>Création des tables en SQL pour implémenter le modèle relationnel.</em></p>
+        <img src="assets/img/sql-requetes-exemple.png" alt="Requêtes SQL">
+        <p><em>Exemples de requêtes SQL pour interroger la base de données.</em></p>
+        <object data="assets/docs/rapport-bdd-exercice.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/rapport-bdd-exercice.pdf" target="_blank">Télécharger le rapport</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 7 — Pentest -->
+    <div class="project-card" data-category="informatique" data-year="2">
+      <img src="assets/img/pentest_metho.jpg" alt="Pentest - Topologie">
+      <h2>7. SAÉ Pentest – Audit de sécurité (VNC → Samba → Pivot → WebApp)</h2>
+      <p>Test d’intrusion complet : prise d’accès initial, compromission d’un serveur Samba, pivot réseau, puis compromission de l’application Web.</p>
+      <div class="project-details">
+        <h2>SAÉ Pentest – Audit de sécurité (méthode PTES)</h2>
+        <p><em>Objectif :</em> démontrer une chaîne d’attaque réaliste à partir d’un accès limité et évaluer l’isolation des réseaux internes.<br>
+           <strong>Résultat :</strong> l’audit conclut à un risque critique(services obsolètes, identifiants par défaut, segmentation contournable via pivoting).</p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Accès initial via une interface VNC Web (point d’entrée).<br>
+          - Reconnaissance réseau et identification d’un serveur Samba vulnérable.<br>
+          - Compromission du serveur Samba (vulnérabilité connue) puis maintien d’accès.<br>
+          - Pivot réseau pour atteindre un segment isolé (WebApp inaccessible au départ).<br>
+          - Accès admin sur DVWA via identifiants par défaut, puis compromission applicative (injection de commande).
+        </p>
+        <p><strong>Vulnérabilités & remédiations principales :</strong><br>
+          - VNC : durcir l’accès (restriction, politique MDP, verrouillage).<br>
+          - Samba : mise à jour / isolation / réduction d’exposition (port 445).<br>
+          - WebApp : suppression identifiants par défaut + validation stricte des entrées.<br>
+          - Segmentation : empêcher le pivoting (contrôle routes/tunnels, supervision).
+        </p>
+        <img src="assets/img/pentest_metho.jpg" class="project-main-img" alt="Topologie du lab pentest">
+        <p><em>Schéma de la chaîne d’attaque (VNC → Samba → Pivot → WebApp).</em></p>
+        <object data="assets/docs/Rapport_pentestSAE_Anty.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/Rapport_pentestSAE_Anty.pdf" target="_blank">Télécharger le rapport</a>.</p>
+        </object>
+        <p style="margin-top:1rem;">
+          <a href="assets/docs/pentest_Sae.pptx" target="_blank">📌 Télécharger la présentation (PPTX)</a>
+        </p>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 8 — Android -->
+    <div class="project-card" data-category="informatique" data-year="2">
+      <img src="assets/img/login.jpg" alt="Application Android - Scanner">
+      <h2>8. Application Android (visualisation des scans JSON)</h2>
+      <p>Appli Android (Java) en plusieurs activités : connexion, récupération JSON depuis un site, affichage des vulnérabilités en liste.</p>
+      <div class="project-details">
+        <h2>SAÉ 3.02 – Application Android communicante (Java)</h2>
+        <p><em>Objectif :</em> créer une application Android (≥ 2 activités) qui communique avec un site web en <strong>JSON</strong> et visualise des failles détectées.</p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Écran de connexion (login/mdp) avec gestion des erreurs.<br>
+          - Écran “Résultats” : appel HTTP GET vers une URL, lecture JSON, affichage des failles dans une ListView.<br>
+          - Écran “Compte” : création / modification de login & mot de passe (avec confirmation).
+        </p>
+        <p><strong>Points techniques :</strong><br>
+          - Communication réseau en thread séparé + retour UI via <code>runOnUiThread()</code>.<br>
+          - Parsing JSON (<code>JSONArray</code>/<code>JSONObject</code>) pour construire une liste lisible “Port / Service / IP”.<br>
+          - Gestion des permissions INTERNET et NETWORK_STATE.<br>
+          - ListView avec ArrayAdapter personnalisé + clic sur item pour détail.
+        </p>
+        <img src="assets/img/different_ecran.jpg" alt="Écran de login">
+        <p><em>Écran de connexion avec validation des champs.</em></p>
+        <img src="assets/img/nouveau_scan.jpg" alt="Écran résultats JSON">
+        <p><em>Affichage des scans en ListView après parsing JSON.</em></p>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 9 — SAÉ3.Cyber.03 -->
+    <div class="project-card" data-category="reseau" data-year="2">
+      <img src="assets/img/shema_reseau.jpg" alt="SAÉ3.Cyber.03 - Schéma réseau">
+      <h2>9. Réseau sécurisé multi-sites (GNS3 / OSPF / HSRP / ASA / VPN / DMZ)</h2>
+      <p>Architecture réseau complète et sécurisée : segmentation VLAN, redondance L2/L3, routage dynamique et services, avec pare-feu ASA, NAT, VPN et DMZ.</p>
+      <div class="project-details">
+        <h2>SAÉ3.Cyber.03 – Concevoir un réseau informatique sécurisé multi-sites</h2>
+        <p><em>Objectif :</em> concevoir un réseau robuste et sécurisé répondant à un cahier des charges (segmentation, redondance, routage, services, sécurité et accès externe maîtrisé).</p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Plan d’adressage + sous-réseaux par site (selon la consigne).<br>
+          - VLAN (collaborateurs, administration, ToIP, Wi-Fi, gestion) + trunks.<br>
+          - Redondance L2 (RSTP / optimisation des liens).<br>
+          - Redondance L3 (HSRP) pour garantir la continuité de service.<br>
+          - Routage OSPF (aire dédiée) + interconnexion des équipements cœur/distribution.<br>
+          - Sécurité : durcissement, ACL, filtrage, SSH/AAA (selon exigences).<br>
+          - Pare-feu ASA : NAT, DMZ avec serveur Web, et VPN.
+        </p>
+        <p><strong>Compétences acquises :</strong><br>
+          Architecture réseau, routage dynamique (OSPF), haute disponibilité (HSRP), segmentation VLAN, sécurité périmétrique (ASA/NAT/VPN/DMZ), validation et dépannage.
+        </p>
+        <img src="assets/img/shema_reseau.jpg" class="project-main-img" alt="Schéma SAÉ3.Cyber.03">
+        <p><em>Schéma de topologie (cœur / distribution / accès) avec FW/DMZ, redondances et interconnexions.</em></p>
+        <object data="assets/docs/01-PRESENTATION_SAE3Cyber03.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/01-PRESENTATION_SAE3Cyber03.pdf" target="_blank">Télécharger la consigne</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 10 — Site Web Nmap -->
+    <div class="project-card" data-category="informatique" data-year="2">
+      <img src="assets/img/article_secu.jpg" alt="Site Web - Scanner Réseau">
+      <h2>10. Site Web – Scanner Réseau (Nmap) + Résultats + Articles</h2>
+      <p>Site web qui permet de lancer un scan réseau et d’afficher les résultats (ports/services/hôtes), avec une page “Articles” dédiée à la veille cybersécurité.</p>
+      <div class="project-details">
+        <h2>Site Web – Visualisation des scans Nmap + Veille cybersécurité</h2>
+        <p><em>Objectif :</em> centraliser une interface web simple pour scanner une IP/plage, visualiser les résultats de manière lisible et proposer une section Articles (veille / bonnes pratiques).</p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Onglets : Scanner / Résultats / Articles.<br>
+          - Saisie “IP cible ou plage” + bouton Lancer le scan.<br>
+          - Affichage du retour : hôtes détectés, ports ouverts, services, synthèse.<br>
+          - Page Articles : cartes d’actualité / bonnes pratiques (phishing, MFA, ransomware, etc.).<br>
+          - Thème UI cohérent (variables CSS : primary/secondary/accent/success/danger).
+        </p>
+        <p><strong>Compétences acquises :</strong><br>
+          Développement web (UI + pages), exploitation et restitution de résultats techniques, structuration d’une interface cybersécurité (scanner + veille).
+        </p>
+        <img src="assets/img/scan_reseau.jpg" class="project-main-img" alt="Page Scanner Réseau">
+        <p><em>Page Scanner : saisie cible + zone d’affichage (console / résultats).</em></p>
+        <img src="assets/img/article_secu.jpg" alt="Page Articles - Veille Cybersécurité">
+        <p><em>Page Articles : veille cybersécurité sous forme de cartes.</em></p>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 11 SAÉ 31 Transmissions TV -->
+    <div class="project-card" data-category="telecommunication" data-year="2">
+      <img src="assets/img/shema_presenta.jpg" alt="SAÉ31 - Transmissions TV (DVB-S / DVB-T)">
+      <h2>11. Transmissions (DVB-S & DVB-T : Satellite / TNT)</h2>
+      <p>Étude théorique + mesures terrain : TV numérique par satellite (DVB-S) et terrestre (DVB-T), analyse spectre, puissance, qualité (C/N, MER, BER) et constellations.</p>
+      <div class="project-details">
+        <h2>SAÉ 31 – Les systèmes de diffusion de télévision (Satellite & TNT)</h2>
+        <p>
+          <em>Objectif :</em> comprendre et mesurer une chaîne de transmission TV numérique, puis comparer
+          <strong>DVB-S (satellite)</strong> et <strong>DVB-T (terrestre/TNT)</strong> : codage correcteur, modulation, spectre, robustesse et qualité de réception.
+        </p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Préparation théorique : codage de canal (Reed-Solomon, convolutif, poinçonnage), transport MPEG-TS, principes de modulation.<br>
+          - Mesures DVB-S : polarisation (13V/18V), rôle de la LNB, analyse spectrale et taux d’erreur (CH BER / pV BER / RU).<br>
+          - Mesures DVB-T : étude de la bande UHF (470–694 MHz), identification de multiplex, largeur de canal (~8 MHz), puissance, et indicateurs qualité (C/N, MER, BER, RU).<br>
+          - Analyse constellation 64-QAM : lien bruit → dispersion → erreurs (MER/BER) et impact sur la qualité de réception.
+        </p>
+        <p><strong>Résultats marquants (exemples de mesures) :</strong><br>
+          <u>DVB-T (TNT)</u> : canal de 8 MHz, fréquence centrale relevée à <strong>618,050 MHz</strong>, puissance ~<strong>59,2 dBµV</strong>, signal verrouillé (LOCK) avec bons indicateurs.<br>
+          <u>DVB-S (satellite)</u> : mesures sur plusieurs fréquences, <strong>CH BER</strong> non nul mais <strong>RU = 0</strong> (corrections efficaces).
+        </p>
+        <p><strong>Compétences acquises :</strong><br>
+          Mesure RF (spectre, puissance), indicateurs qualité numériques (C/N, MER, BER), lecture de constellations,
+          compréhension DVB-S/DVB-T (QPSK/OFDM-QAM), rôle de la LNB et des polarisations.
+        </p>
+        <img src="assets/img/spectre_tnt.jpg" class="project-main-img" alt="Spectre TNT (UHF 470–694 MHz)">
+        <p><em>Spectre UHF : repérage des multiplex TNT et zoom sur un canal.</em></p>
+        <img src="assets/img/sae31_constellation_64qam.jpg" alt="Constellation 64-QAM">
+        <img src="assets/img/constellation_64qam.jpg" alt="Constellation 64-QAM">
+        <p><em>Constellation 64-QAM : dispersion des points → bruit → impact sur MER/BER.</em></p>
+        <img src="assets/img/satellite_spectre.jpg" alt="Spectre satellite et polarisation (13V/18V)">
+        <p><em>Réception satellite : polarisation 13V/18V, spectre et ajustement pour maximiser la puissance.</em></p>
+        <object data="assets/docs/SAE31-Transmissions.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF.
+            <a href="assets/docs/SAE31-Transmissions.pdf" target="_blank">Télécharger le rapport</a>.
+          </p>
+        </object>
+        <p style="margin-top:1rem;">
+          <a href="assets/docs/TP-saé31.pdf" target="_blank"> Télécharger les consignes TP (PDF)</a>
+          &nbsp;|&nbsp;
+          <a href="assets/docs/CR_saé31.pdf" target="_blank">Télécharger le gabarit CR (PDF)</a>
+        </p>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 12 — Java + Base de données (Nmap → MySQL) -->
+    <div class="project-card" data-category="informatique" data-year="2">
+      <img src="assets/img/basededone.jpg" alt="Java + MySQL - Résultats Nmap">
+      <h2>12. Projet Java – Scan réseau (Nmap) + stockage en base MySQL</h2>
+      <p>Programme Java qui lance un scan Nmap (hôtes/ports/services) et enregistre automatiquement les résultats dans une base MySQL pour affichage sur un site web.</p>
+      <div class="project-details">
+        <h2>Java + MySQL – Exploiter un scan Nmap et centraliser les résultats</h2>
+        <p><em>Objectif :</em> automatiser la collecte des résultats d’un scan Nmap et les stocker dans une base de données afin de pouvoir les consulter ensuite via une interface web (onglet Résultats).</p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Développement d’un programme Java qui récupère les informations issues d’un scan Nmap (IP, ports, état, service, version).<br>
+          - Insertion automatique des données en base MySQL via JDBC.<br>
+          - Structuration de la base pour séparer : <strong>hôtes détectés</strong> et <strong>ports/services scannés</strong>.<br>
+          - Préparation des données pour être facilement exploitables par le site web (tableaux, filtres, historique).
+        </p>
+        <p><strong>Base de données (extrait) :</strong><br>
+          - Table <code>hosts</code> : IP + MAC (+ id).<br>
+          - Table <code>scan_ports</code> : port, state, service, version, ip_cible (+ id).<br>
+          <em>=> permet de retrouver pour une IP donnée tous les ports ouverts/fermés et les services associés.</em>
+        </p>
+        <img src="assets/img/base.jpg" class="project-main-img" alt="Extrait script SQL - tables hosts et scan_ports">
+        <p><em>Extrait du script SQL : tables <code>hosts</code> et <code>scan_ports</code> pour stocker les résultats du scan.</em></p>
+        <img src="assets/img/javaim.jpg" class="project-main-img" alt="Extrait script SQL - tables hosts et scan_ports">
+        <p><strong>Compétences acquises :</strong><br>
+          Java (JDBC), bases de données MySQL, modélisation simple orientée “résultats de scan”, automatisation et intégration avec une application web.</p>
+        <p style="margin-top:1rem;">
+          <a href="assets/code/Send2BdD_Hosts.java" target="_blank"> Code Java : envoi Hosts</a>
+          &nbsp;|&nbsp;
+          <a href="assets/code/Send2BdD_Vuln.java" target="_blank"> Code Java : envoi Ports/Vuln</a>
+        </p>
+        <object data="assets/docs/base_donne_java_site.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/base_donne_java_site.pdf" target="_blank">Télécharger la documentation</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 13 — Personnel : Tableaux électriques -->
+    <div class="project-card" data-category="personnelle" data-year="2">
+      <img src="assets/img/tablaeu_elec.jpeg" alt="Tableau électrique">
+      <h2>13. Apprentissage des tableaux électriques</h2>
+      <p>Projet personnel pour apprendre à concevoir et installer des tableaux électriques, avec focus sur les disjoncteurs et la sécurité.</p>
+      <div class="project-details">
+        <h2>Apprentissage des tableaux électriques</h2>
+        <p><em>Objectif :</em> Acquérir les bases de l'électricité domestique et industrielle en apprenant à monter un tableau électrique.</p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Étude des normes électriques (NF C 15-100).<br>
+          - Conception d'un schéma de tableau (répartition des circuits, protection).<br>
+          - Installation pratique : câblage, pose de disjoncteurs, différentiels, et tests de continuité.<br>
+          - Analyse de la sécurité : terre, protection contre surcharges et courts-circuits.
+        </p>
+        <p><strong>Compétences acquises :</strong><br>
+          Électricité domestique, câblage, normes de sécurité, utilisation d'outils (multimètre, pince ampèremétrique).</p>
+        <p><strong>Rendus :</strong><br>
+          - Photos du tableau monté.<br>
+          - Schéma électrique (image).<br>
+          - Notes personnelles sur les erreurs courantes et bonnes pratiques.</p>
+        <img src="assets/img/tableau.HEIC" class="project-main-img" alt="Disjoncteurs dans tableau électrique">
+        <p><em>Exemple de disjoncteurs installés dans un tableau électrique.</em></p>
+        <img src="assets/img/shema_tableau.JPG" alt="Schéma tableau électrique">
+        <p><em>Schéma détaillé</em></p>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+    <!-- Projet 14 — Personnel : Contrôleur d'installations -->
+    <div class="project-card" data-category="personnelle" data-year="2">
+      <img src="assets/img/controleur.jpeg" alt="Contrôleur d'installations">
+      <h2>14. Apprentissage d'un contrôleur d'installations</h2>
+      <p>Projet personnel pour apprendre à utiliser un contrôleur d'installations électriques, avec vérifications de conformité et sécurité.</p>
+      <div class="project-details">
+        <h2>Apprentissage d'un contrôleur d'installations électriques</h2>
+        <p><em>Objectif :</em> Maîtriser l'utilisation d'un contrôleur pour vérifier la sécurité et la conformité des installations électriques.</p>
+        <p><strong>Ce que j’ai fait :</strong><br>
+          - Étude du fonctionnement du contrôleur (mesures de résistance, isolation, continuité, terre).<br>
+          - Tests pratiques sur installations réelles : vérification de la terre, mesure de boucles de défaut, tests de différentiels.<br>
+          - Analyse des résultats et diagnostic de problèmes potentiels (fuites, mauvais câblage).<br>
+          - Rédaction d'un rapport de contrôle avec recommandations.
+        </p>
+        <p><strong>Compétences acquises :</strong><br>
+          Diagnostic électrique, utilisation d'outils de mesure, normes de sécurité (NF C 15-100), rapportage technique.</p>
+        <p><strong>Rendus :</strong><br>
+          - Photos de l'outil en action.<br>
+          - Exemples de mesures (images).<br>
+          - Rapport de contrôle (PDF).</p>
+        <img src="assets/img/control.jpeg" class="project-main-img" alt="Contrôleur en utilisation">
+        <p><em>Utilisation du contrôleur pour mesurer l'isolation.</em></p>
+       
+        <object data="assets/docs/rapport_controle_installations.pdf" type="application/pdf">
+          <p>Votre navigateur ne peut pas afficher le PDF. <a href="assets/docs/rapport_controle_installations.pdf" target="_blank">Télécharger le rapport</a>.</p>
+        </object>
+      </div>
+      <button class="close-btn" style="display: none;">Fermer</button>
+    </div>
+  </div>
+
+  <div class="overlay"></div>
+
+  <footer>© 2025 — Anne-Juliette | <a href="index.html">Retour à l'accueil</a></footer>
+
+  <script>
+    const cards = document.querySelectorAll('.project-card');
+    const overlay = document.querySelector('.overlay');
+    const catSelect = document.getElementById('cat-select');
+    const yearSelect = document.getElementById('year-select');
+
+    let currentCat = 'all';
+    let currentYear = 'all';
+
+    function applyFilter() {
+      cards.forEach(card => {
+        const catOk = currentCat === 'all' || card.dataset.category === currentCat;
+        const yearOk = currentYear === 'all' || card.dataset.year === currentYear;
+        card.style.display = catOk && yearOk ? 'block' : 'none';
+      });
+    }
+
+    catSelect.addEventListener('change', () => {
+      currentCat = catSelect.value;
+      applyFilter();
+    });
+
+    yearSelect.addEventListener('change', () => {
+      currentYear = yearSelect.value;
+      applyFilter();
+    });
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (!card.classList.contains('expanded')) {
+          cards.forEach(c => c.classList.remove('expanded'));
+          card.classList.add('expanded');
+          overlay.classList.add('active');
+        }
+      });
+
+      const btn = card.querySelector('.close-btn');
+      if (btn) {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          card.classList.remove('expanded');
+          overlay.classList.remove('active');
+        });
+      }
+    });
+
+    overlay.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('expanded'));
+      overlay.classList.remove('active');
+    });
+
+    applyFilter(); // initial
+  </script>
+</body>
+</html>
+```

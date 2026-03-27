@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expériences Professionnelles – Anne-Juliette</title>
+  <style>
+    /* Reset & base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #2e8b57; /* vert jungle */
+      color: #3c2f2f;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Feuilles décoratives */
+    .leaf {
+      position: fixed;
+      width: 100px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .leaf-tl { top: 0; left: 0; transform: rotate(0deg); }
+    .leaf-tr { top: 0; right: 0; transform: scaleX(-1); }
+    .leaf-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+    .leaf-br { bottom: 0; right: 0; transform: scale(-1); }
+
+    /* Navigation */
+    nav.topnav {
+      position: sticky;
+      top: 0;
+      background: rgba(60, 47, 47, 0.5); /* Chocolat */
+      backdrop-filter: blur(5px);
+      z-index: 10;
+    }
+    nav.topnav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+    nav.topnav a {
+      text-decoration: none;
+      color: #f0f0f0; /* Vanille */
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav.topnav a:hover {
+      color: #98ff98; /* Vert menthe */
+    }
+
+    /* Message d'accueil */
+    .welcome {
+      max-width: 800px;
+      margin: 3rem auto 2rem;
+      text-align: center;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #f0f0f0;
+      padding: 1rem;
+    }
+    .welcome h1 {
+      font-family: 'Courier New', /*monospace*/;
+      font-size: 2.5rem;
+      color: #f3e5ab;
+      margin-bottom: 1rem;
+    }
+
+    /* Conteneur des expériences */
+    .exp-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      z-index: 2;
+    }
+
+    /* Style des cartes d'expériences */
+    .exp-card {
+      background: #f3e5ab; /* Vanille */
+      border: 3px solid #3c2f2f; /* Chocolat */
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .exp-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      border-color: #98ff98; /* Vert menthe */
+    }
+
+    .exp-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 0.5rem;
+    }
+
+    .exp-card h2 {
+      font-family: 'Courier New', monospace;
+      font-size: 1.4rem;
+      color: #3c2f2f;
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-card .details {
+      font-size: 1rem;
+      color: #3c2f2f;
+      line-height: 1.4;
+      margin-bottom: 0.7rem;
+    }
+    .exp-card .details span {
+      font-style: italic;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-card ul {
+      list-style: none;
+      text-align: left;
+      font-size: 0.95rem;
+      color: #3c2f2f;
+      padding-left: 1rem;
+    }
+    .exp-card li {
+      position: relative;
+      margin-bottom: 0.3rem;
+      padding-left: 1rem;
+    }
+    .exp-card li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #000000; /* Noir */
+      font-size: 1rem;
+    }
+
+    /* Footer */
+    footer {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.8rem;
+      color: #f3e5ab;
+      z-index: 2;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .welcome h1 {
+        font-size: 2rem;
+      }
+      .welcome p {
+        font-size: 1rem;
+      }
+      .exp-container {
+        grid-template-columns: 1fr;
+        margin: 1rem;
+      }
+      .exp-card img {
+        width: 60px;
+        height: 60px;
+      }
+      .exp-card h2 {
+        font-size: 1.2rem;
+      }
+      .exp-card .details {
+        font-size: 0.9rem;
+      }
+      .exp-card ul {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Feuilles décoratives -->
+  <img src="assets/img/Rose_blanche.png" class="leaf leaf-tl" alt="">
+  <img src="assets/img/Rose_blanche.png" class="leaf leaf-tr" alt="">
+  <img src="assets/img/Rose_blanche.png" class="leaf leaf-bl" alt="">
+  <img src="assets/img/Rose_blanche.png" class="leaf leaf-br" alt="">
+
+  <!-- Navigation -->
+  <nav class="topnav">
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="competences.html">Compétences</a></li>
+      <li><a href="experiences.html">Expériences professionnelles</a></li>
+      <li><a href="apropos.html">À propos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Message d'accueil -->
+  <div class="welcome">
+    <h1>Mes Expériences Professionnelles</h1>
+    <p>Découvrez mes expériences professionnelles acquises lors de stages dans divers domaines, de la vente de matériels électriques à la domotique, en passant par la maintenance informatique et la gestion technique de spectacles.</p>
+  </div>
+
+  <!-- Conteneur des expériences -->
+  <div class="exp-container">
+    <!-- Expérience 1: Yesss Électrique 2024 -->
+    <div class="exp-card">
+      <img src="assets/img/sales-icon.png" alt="Icône Vente Électrique">
+      <h2>Stage en Vente – Yesss Électrique</h2>
+      <div class="details">
+        <span>2024, 1 mois – France</span>
+      </div>
+      <ul>
+        <li>Accueil et conseil client en vente de matériels électriques</li>
+        <li>Gestion des stocks et réception des marchandises</li>
+        <li>Organisation de promotions et campagnes marketing</li>
+      </ul>
+    </div>
+
+    <!-- Expérience 2: Cannoise Modern Electrique 2024 -->
+    <div class="exp-card">
+      <img src="assets/img/domotics-icon.png" alt="Icône Domotique">
+      <h2>Stage en Domotique – Cannoise Modern Electrique</h2>
+      <div class="details">
+        <span>2024, 1 mois – Mouans-Sartoux, France</span>
+      </div>
+      <ul>
+        <li>Installation et programmation de systèmes KNX, My Home et SCS</li>
+        <li>Conception de solutions domotiques personnalisées</li>
+        <li>Interconnexion de composants électriques pour l’automatisation</li>
+      </ul>
+    </div>
+
+    <!-- Expérience 3: Théâtre de Grasse 2023 -->
+    <div class="exp-card">
+      <img src="assets/img/theater-icon.png" alt="Icône Théâtre">
+      <h2>Stage Technique – Théâtre de Grasse</h2>
+      <div class="details">
+        <span>2023, 1 mois – Grasse, France</span>
+      </div>
+      <ul>
+        <li>Assistance des techniciens sur l’éclairage, le son et la vidéo</li>
+        <li>Installation et réglage des équipements techniques</li>
+        <li>Participation aux répétitions et interventions sur les problèmes techniques</li>
+      </ul>
+    </div>
+
+    <!-- Expérience 4: Maintenance Informatique 2023 -->
+    <div class="exp-card">
+      <img src="assets/img/it-icon.png" alt="Icône Maintenance Informatique">
+      <h2>Stage en Maintenance Informatique</h2>
+      <div class="details">
+        <span>2023, 1 mois – Cagnes-sur-Mer, France</span>
+      </div>
+      <ul>
+        <li>Diagnostic et réparation des problèmes matériels et logiciels</li>
+        <li>Mise à niveau des composants et installation de logiciels</li>
+        <li>Conseil et assistance aux clients</li>
+      </ul>
+    </div>
+
+    <!-- Expérience 5: Cannoise Modern Electrique 2022 -->
+    <div class="exp-card">
+      <img src="assets/img/domotics-icon.png" alt="Icône Domotique">
+      <h2>Stage en Domotique – Cannoise Modern Electrique</h2>
+      <div class="details">
+        <span>2022, 6 semaines – Mouans-Sartoux, France</span>
+      </div>
+      <ul>
+        <li>Configuration et mise en place de systèmes domotiques</li>
+        <li>Application des normes de sécurité sur les chantiers</li>
+        <li>Installation et programmation de systèmes KNX, My Home et SCS</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>© 2025 — Anne-Juliette | <a href="index.html">Retour à l'accueil</a></footer>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compétences – Anne-Juliette</title>
+  <style>
+    /* Reset & base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #2e8b57; /* vert jungle */
+      color: #3c2f2f;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Défilement fluide */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Feuilles décoratives */
+    .leaf {
+      position: fixed;
+      width: 100px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .leaf-tl { top: 0; left: 0; transform: rotate(0deg); }
+    .leaf-tr { top: 0; right: 0; transform: scaleX(-1); }
+    .leaf-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+    .leaf-br { bottom: 0; right: 0; transform: scale(-1); }
+
+    /* Navigation */
+    nav.topnav {
+      position: sticky;
+      top: 0;
+      background: rgba(60, 47, 47, 0.5); /* Chocolat */
+      backdrop-filter: blur(5px);
+      z-index: 10;
+    }
+    nav.topnav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+    nav.topnav a {
+      text-decoration: none;
+      color: #f0f0f0; /* Vanille */
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav.topnav a:hover {
+      color: #98ff98; /* Vert menthe */
+    }
+
+    /* Message d'accueil */
+    .welcome {
+      max-width: 800px;
+      margin: 3rem auto 2rem;
+      text-align: center;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #f0f0f0;
+      padding: 1rem;
+    }
+    .welcome h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 2.5rem;
+      color: #f3e5ab;
+      margin-bottom: 1rem;
+    }
+
+    /* Bouton vers Soft Skills – version beige → vert au hover */
+.goto-soft-btn {
+  display: inline-block;
+  margin: 1.5rem auto 2rem;
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #3c2f2f;
+  background: #f3e5ab;        /* ← beige / vanille */
+  border: 3px solid #3c2f2f;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.goto-soft-btn:hover {
+  background: #98ff98;        /* ← vert menthe au survol */
+  color: #3c2f2f;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  border-color: #3c2f2f;
+}
+
+    /* Conteneur des compétences */
+    .skills-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      z-index: 2;
+    }
+
+    /* Style des cartes de compétences */
+    .skill-card {
+      background: #f3e5ab; /* Vanille */
+      border: 3px solid #3c2f2f; /* Chocolat */
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      text-align: center;
+    }
+    .skill-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      border-color: #98ff98; /* Vert menthe */
+    }
+    .skill-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 0.5rem;
+      border: 2px solid #3c2f2f;
+      border-radius: 5px;
+    }
+    .skill-card h2 {
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      color: #3c2f2f;
+      margin-bottom: 0.5rem;
+    }
+    .skill-card p {
+      font-size: 0.9rem;
+      color: #3c2f2f;
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Ajustement ancre soft skills */
+    #soft-skills {
+      padding-top: 100px;
+      margin-top: -100px;
+    }
+
+    /* Footer */
+    footer {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.8rem;
+      color: #f3e5ab;
+      z-index: 2;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .skills-container {
+        grid-template-columns: 1fr;
+        margin: 1rem;
+      }
+      .skill-card img {
+        width: 60px;
+        height: 60px;
+      }
+      .skill-card h2 {
+        font-size: 1rem;
+      }
+      .skill-card p {
+        font-size: 0.8rem;
+      }
+      .goto-soft-btn {
+        padding: 0.8rem 1.8rem;
+        font-size: 1rem;
+      }
+      #soft-skills {
+        padding-top: 80px;
+        margin-top: -80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Feuilles décoratives -->
+  <img src="assets/img/Fleur_hibiscus_jaune.png" class="leaf leaf-tl" alt="">
+  <img src="assets/img/Fleur_hibiscus_jaune.png" class="leaf leaf-tr" alt="">
+  <img src="assets/img/Fleur_hibiscus_jaune.png" class="leaf leaf-bl" alt="">
+  <img src="assets/img/Fleur_hibiscus_jaune.png" class="leaf leaf-br" alt="">
+
+  <!-- Navigation -->
+  <nav class="topnav">
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="#soft-skills">Compétences</a></li>
+      <li><a href="experiences.html">Expériences professionnelles</a></li>
+      <li><a href="apropos.html">À propos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Message d'accueil + BOUTON -->
+  <div class="welcome">
+    <h1>Mes Compétences</h1>
+    <p>Découvrez mes compétences techniques acquises lors de ma formation en Réseaux et Télécommunications et à travers mes projets. Chaque carte présente une compétence avec un niveau de maîtrise visuel.</p>
+    
+    <!-- Le bouton qui va directement aux soft skills -->
+    <a href="#soft-skills" class="goto-soft-btn">
+      Voir mes Soft Skills ↓
+    </a>
+  </div>
+
+  <!-- Conteneur des compétences techniques -->
+  <div class="skills-container">
+    <!-- Compétence 1: HTML5 -->
+    <div class="skill-card">
+      <img src="assets/img/Html.png" alt="Icône HTML5">
+      <h2>HTML5 (Développement Web Front-End)</h2>
+      <p>Structure sémantique pour sites web responsives (voir SAÉ 15, R209).</p>
+    </div>
+
+    <!-- Compétence 2: CSS3 -->
+    <div class="skill-card">
+      <img src="assets/img/Css.png" alt="Icône CSS3">
+      <h2>CSS3 (Stylisation Web)</h2>
+      <p>Stylisation et design responsive pour interfaces web (voir SAÉ 15, R209).</p>
+    </div>
+
+    <!-- Compétence 3: JavaScript -->
+    <div class="skill-card">
+      <img src="assets/img/js.png" alt="Icône JavaScript">
+      <h2>JavaScript (Programmation Client-Side)</h2>
+      <p>Interactivité et scripts pour applications web dynamiques (voir SAÉ 15, R209).</p>
+    </div>
+
+    <!-- Compétence 4: Java -->
+    <div class="skill-card">
+      <img src="assets/img/java.png" alt="Icône Java">
+      <h2>Java (Développement Applications)</h2>
+      <p>Programmation pour applications android et gestion de kali (voir SAÉ 32).</p>
+    </div>
+
+    <!-- Compétence 5: Python -->
+    <div class="skill-card">
+      <img src="assets/img/python.jpeg" alt="Icône Python">
+      <h2>Python (Automatisation et Données)</h2>
+      <p>Programmation pour automatisation et gestion de données (voir SAÉ 25, R209).</p>
+    </div>
+
+    <!-- Compétence 6: MySQL -->
+    <div class="skill-card">
+      <img src="assets/img/MySql.png" alt="Icône MySQL">
+      <h2>MySQL (Gestion Bases de Données)</h2>
+      <p>Conception et gestion de bases de données relationnelles (voir PHOTO_ATB, R207).</p>
+    </div>
+
+    <!-- Compétence 7: Cisco Packet Tracer -->
+    <div class="skill-card">
+      <img src="assets/img/paket_tracer.png" alt="Icône Réseaux">
+      <h2>Cisco Packet Tracer (Simulation Réseaux)</h2>
+      <p>Configuration de réseaux, analyse de trafic, et calculs énergétiques (voir SAÉ 12, SAÉ 21).</p>
+    </div>
+
+    <!-- Compétence 8: PHP -->
+    <div class="skill-card">
+      <img src="assets/img/php.png" alt="Icône PHP">
+      <h2>PHP (Développement Back-End)</h2>
+      <p>Développement back-end pour sites web dynamiques et sécurisés (voir R209).</p>
+    </div>
+
+    <!-- Compétence 9: Cisco Networking -->
+    <div class="skill-card">
+      <img src="assets/img/cisco.png" alt="Icône Cisco">
+      <h2>Cisco Networking (Configuration Réseaux d'Entreprise)</h2>
+      <p>Configuration de réseaux d’entreprise avec VLAN, DHCP, DNS, et ASA (voir SAÉ 21).</p>
+    </div>
+
+    <!-- Compétence 10: Wireshark -->
+    <div class="skill-card">
+      <img src="assets/img/wireshark.jpeg" alt="Icône Wireshark">
+      <h2>Wireshark (Analyse Trafic Réseau)</h2>
+      <p>Analyse de trafic réseau et diagnostic (voir SAÉ 12).</p>
+    </div>
+
+    <!-- Compétence 11: Linux/Unix Systems -->
+    <div class="skill-card">
+      <img src="assets/img/linux.png" alt="Icône Linux">
+      <h2>Linux/Unix Systems (Administration Système)</h2>
+      <p>Administration système et configuration réseau (utilisé dans divers projets R&T).</p>
+    </div>
+
+<!-- Compétence Android Studio -->
+<div class="skill-card">
+  <img src="assets/img/android.jpg" alt="Icône Android Studio">
+  <h2>Android Studio (Développement Mobile)</h2>
+  <p>Développement d’applications Android natives en Java/Kotlin, gestion d’activités, permissions, appels HTTP/JSON et interfaces responsives (voir SAÉ 3.02).</p>
+</div>
+
+<!-- Compétence GNS3 – à rajouter ici -->
+<div class="skill-card">
+  <img src="assets/img/gns3.jpg" alt="Icône GNS3">
+  <h2>GNS3 (Simulation Réseaux Avancée)</h2>
+  <p>Conception et simulation de topologies réseaux complexes (routage dynamique OSPF, redondance HSRP, pare-feu ASA, VPN, DMZ) pour tests et validations SAE3.</p>
+</div>
+
+    <!-- Compétence 12: Arduino -->
+    <div class="skill-card">
+      <img src="assets/img/arduino.png" alt="Icône Arduino">
+      <h2>Arduino (Programmation Embarquée et Mesures)</h2>
+      <p>Prise de mesures avec antenne (SAÉ 22).</p>
+    </div>
+
+    <!-- Compétence 13: Gestion de Projet -->
+    <div class="skill-card">
+      <img src="assets/img/excel.png" alt="Icône Gestion de Projet">
+      <h2>Gestion de Projet (avec Excel)</h2>
+      <p>Planification et coordination de projets techniques (voir SAÉ 12, SAÉ 15).</p>
+    </div>
+  </div>
+
+  <!-- Section Soft Skills avec ancre -->
+<div id="soft-skills" class="welcome">
+  <h1>Mes Soft Skills</h1>
+  <p>Soft skills développées au cours de ma formation, de mes expériences professionnelles et de mon engagement comme sapeur-pompier volontaire.</p>
+</div>
+
+<div class="skills-container">
+  <!-- Soft Skill 1: Communication -->
+  <div class="skill-card">
+    <img src="assets/img/comunication.jpg" alt="Icône Communication">
+    <h2>Communication</h2>
+    <p>Expression claire et écoute active.<br><br>
+       <em>Renforcée en vente (Yesss) et domotique (conseil clients).</em></p>
+  </div>
+
+  <!-- Soft Skill 2: Travail en équipe -->
+  <div class="skill-card">
+    <img src="assets/img/equipe.jpg" alt="Icône Travail en équipe">
+    <h2>Travail en équipe</h2>
+    <p>Collaboration efficace pour des objectifs communs.<br><br>
+       <em>Essentielle au Théâtre de Grasse et comme sapeur-pompier volontaire.</em></p>
+  </div>
+
+  <!-- Soft Skill 3: Gestion du temps -->
+  <div class="skill-card">
+    <img src="assets/img/gestion_temp.jpg" alt="Icône Gestion du temps">
+    <h2>Gestion du temps</h2>
+    <p>Organisation et respect des délais.<br><br>
+       <em>Apprise en stages courts et interventions pompiers.</em></p>
+  </div>
+
+  <!-- Soft Skill 4: Adaptabilité -->
+  <div class="skill-card">
+    <img src="assets/img/adaptabilite.jpg" alt="Icône Adaptabilité">
+    <h2>Adaptabilité</h2>
+    <p>Ajustement rapide aux changements et nouveaux contextes.<br><br>
+       <em>Développée dans tous mes stages.</em></p>
+  </div>
+
+  <!-- Soft Skill 5: Résolution de problèmes -->
+  <div class="skill-card">
+    <img src="assets/img/solution.jpg" alt="Icône Résolution de problèmes">
+    <h2>Résolution de problèmes</h2>
+    <p>Analyse et solutions efficaces.<br><br>
+       <em>Exercée en maintenance informatique, domotique et missions pompiers.</em></p>
+  </div>
+
+  <!-- Nouvelle : Autonomie sur interventions -->
+  <div class="skill-card">
+    <img src="assets/img/autonomie.jpeg" alt="Icône Autonomie">
+    <h2>Autonomie sur interventions</h2>
+    <p>Prise en charge indépendante des tâches.<br><br>
+       <em>Fortement développée comme sapeur-pompier volontaire et en domotique/chantiers.</em></p>
+  </div>
+
+
+  <!-- Nouvelle : Sens du support client -->
+  <div class="skill-card">
+    <img src="assets/img/support_client.jpeg" alt="Icône Support client">
+    <h2>Sens du support client</h2>
+    <p>Écoute et accompagnement jusqu’à résolution.<br><br>
+       <em>Renforcé en vente (Yesss electrique) et maintenance informatique.</em></p>
+  </div>
+</div>
+
+  <footer>© 2025 — Anne-Juliette | <a href="index.html">Retour à l'accueil</a></footer>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio – Anne-Juliette</title>
+  <style>
+    /* Reset et base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #2e8b57; /* vert jungle plus doux */
+      color: #f0f0f0;
+      min-height: 100vh;
+      position: relative;
+    }
+    /* Feuilles décoratives */
+    .leaf {
+      position: fixed;
+      width: 120px;
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .leaf-tl { top: 0;    left: 0;   transform: rotate(0deg);    }
+    .leaf-tr { top: 0;    right: 0;  transform: scaleX(-1);     }
+    .leaf-bl { bottom: 0; left: 0;   transform: scaleY(-1);     }
+    .leaf-br { bottom: 0; right: 0;  transform: scale(-1);       }
+    /* Navigation en haut */
+    nav.topnav {
+      position: sticky;
+      top: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(5px);
+      z-index: 2;
+    }
+    nav.topnav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      gap: 2rem;
+    }
+    nav.topnav a {
+      text-decoration: none;
+      color: #f0f0f0;
+      font-weight: bold;
+      transition: color .2s;
+    }
+    nav.topnav a:hover {
+      color: #62e82d;
+    }
+    /* Contenu principal */
+    .container {
+      max-width: 800px;
+      margin: 4rem auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .title {
+      font-family: 'Courier New', monospace;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      
+    }
+    .intro {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      margin-bottom: 2.5rem;
+      padding: 0 1rem;
+      display: block;
+    }
+    .profile-pic {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .profile-pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Bouton de téléchargement du CV */
+    .cv-button {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      margin: 1rem auto;
+      background: #f3e5ab;
+      color: #2e8b57;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .cv-button:hover {
+      background: #f0f0f0;
+      transform: scale(1.05);
+    }
+    /* Pied de page */
+    footer {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.8rem;
+      color: #f0f0f0;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <!-- Feuilles jungles -->
+  <img src="assets/img/leaf.png" class="leaf leaf-tl" alt="">
+  <img src="assets/img/leaf.png" class="leaf leaf-tr" alt="">
+  <img src="assets/img/leaf.png" class="leaf leaf-bl" alt="">
+  <img src="assets/img/leaf.png" class="leaf leaf-br" alt="">
+
+  <!-- Barre de navigation -->
+  <nav class="topnav">
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="competences.html">Compétences</a></li>
+      <li><a href="experiences.html">Expériences professionnelle</a></li>
+      <li><a href="apropos.html">À propos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Contenu principal -->
+  <div class="container">
+    <h1 class="title">Anne-Juliette Anty </h1>
+    <h1 class="title">étudiante en réseaux et telecom_</h1>
+  
+      <p class="intro">
+        Bienvenue sur mon site.<br><br>
+        Actuellement en deuxième année de BUT Réseaux et Télécommunications, j’ai pu développer des compétences en administration des réseaux (adressage IP, VLAN, configuration de routeurs) ainsi qu’en développement informatique et web (Python, JavaScript, HTML5, CSS3, MySQL).<br>
+        Je m’apprête à réaliser un stage chez SAP, où je compte acquérir de nouvelles compétences techniques et professionnelles, notamment en cybersécurité, gestion des systèmes et développement. À court terme, je poursuis la validation de mon diplôme.
+        </p>
+    <div class="profile-pic">
+      <img src="assets/img/photo.jpeg" alt="Ma photo de profil">
+    </div>
+    <a href="assets/docs/CV_ANTY.pdf" class="cv-button" download>Télécharger mon CV</a>
+  </div>
+
+  <footer>&copy; 2025 — Anne-Juliette</footer>
+</body>
+</html>
